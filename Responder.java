@@ -126,15 +126,35 @@ public class Responder
         try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
             BufferedReader reader2=Files.newBufferedReader(path, charset);
             String response = reader.readLine();
-            String response2 = reader2.readLine();
-            response2 = reader2.readLine();
-            while(response != null&&response2!=null) {
-                if(response.equals("")==false&&response2.equals("")){
+            
+            //string that will hold the response one line ahead of the current one
+            String ahead = reader2.readLine();
+            
+            //string that will hold in-progress response combinations
+            String combination = "";
+            
+            boolean entry = true;
+            
+            ahead = reader2.readLine();
+            while(response != null&&ahead!=null) {
+                entry=true;
+                if(response.equals("")==false&&ahead.equals("")){
                     defaultResponses.add(response);
-                    System.out.println(response);
+                    //System.out.println(response);
+                }
+                else if(response.equals("")==false&&ahead.equals("")==false){
+                    if(combination==""){
+                        combination=response+ahead;
+                        defaultResponses.add(combination);
+                        response = reader.readLine();
+                        ahead = reader2.readLine();
+                    }
+                    else{
+                        combination=combination+ahead;
+                    }
                 }
                 response = reader.readLine();
-                response2 = reader2.readLine();
+                ahead = reader2.readLine();
             }
             if(response.equals("")==false){
                 defaultResponses.add(response);
@@ -152,6 +172,7 @@ public class Responder
         if(defaultResponses.size() == 0) {
             defaultResponses.add("Could you elaborate on that?");
         }
+        System.out.println(defaultResponses);
     }
 
     /**
