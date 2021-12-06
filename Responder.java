@@ -76,9 +76,6 @@ public class Responder
             String ahead = reader2.readLine();
             ahead = reader2.readLine();
 
-            //filler variable for counting
-            int i=0;
-
             //variable for iterating through totalWordArray
             int word = 0;
 
@@ -91,24 +88,23 @@ public class Responder
             //whether or not program is on the first line of the response
             boolean first = true;
             while(line!=null&&ahead!=null) {  
-                if(first==false){
-                    response=response+line;
+                if(first==false&&line.equals("")==false){
+                    response=response+" "+line;
                 }
-                if(first==true&&(line!=null||line!="")){
+                if(first==true&&line.equals("")==false){
+                    System.out.println(line);
                     wordArray = line.split(",");
-                    i=wordArray.length;
                     first=false;
                 }
-                if(ahead.equals("")){
-                    line = reader.readLine();
-                    response=response+" "+line;
-                    word=0;
+                if(ahead.equals("")&&first==false&&line.equals("")==false){
                     while(word<wordArray.length){
                         responseMap.put(wordArray[word].trim(), 
                             response);
                         word++;
                     } 
+                    response="";
                     first=true;
+                    word=0;
                 }
                 line = reader.readLine();
                 ahead = reader2.readLine();
