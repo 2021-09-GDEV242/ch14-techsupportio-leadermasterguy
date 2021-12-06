@@ -75,21 +75,54 @@ public class Responder
             String line = reader.readLine();
             String ahead = reader2.readLine();
             ahead = reader2.readLine();
-            
-            //array of all keys
-            String[] totalWordArray={};
-            
-            //array of keys for any individual response
-            String[] tempWordArray={};
-            
-            if(line!=null||line!=""){
-                tempWordArray = line.split(",");
-            }
-            System.out.println(tempWordArray);
-            
+
+            //filler variable for counting
+            int i=0;
+
+            //variable for iterating through totalWordArray
+            int word = 0;
+
+            //current response
+            String response = "";
+
+            //array of keys for an individual response
+            String[] wordArray={};
+
+            //whether or not program is on the first line of the response
+            boolean first = true;
             while(line!=null&&ahead!=null) {  
+                if(first==false){
+                    response=response+line;
+                }
+                if(first==true&&(line!=null||line!="")){
+                    wordArray = line.split(",");
+                    i=wordArray.length;
+                    first=false;
+                }
+                if(ahead.equals("")){
+                    line = reader.readLine();
+                    response=response+" "+line;
+                    word=0;
+                    while(word<wordArray.length){
+                        responseMap.put(wordArray[word].trim(), 
+                            response);
+                        word++;
+                    } 
+                    first=true;
+                }
                 line = reader.readLine();
                 ahead = reader2.readLine();
+            }
+            if(ahead==null){
+                line = reader.readLine();
+                    response=response+" "+line;
+                    word=0;
+                    while(word<wordArray.length){
+                        responseMap.put(wordArray[word].trim(), 
+                            response);
+                        word++;
+                    } 
+                    first=true;
             }
         }
         catch(FileNotFoundException e) {
@@ -99,6 +132,7 @@ public class Responder
             System.err.println("A problem was encountered reading " +
                 FILE_OF_RESPONSE_MAP);
         }
+        System.out.println(responseMap);
     }
 
     /**
